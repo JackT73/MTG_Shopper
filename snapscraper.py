@@ -3,6 +3,8 @@ import json
 import time
 import sys
 import math, operator
+import retailer_selection
+from ListingException import ListingException
 
 from io import BytesIO
 from PIL import Image, ImageChops
@@ -19,25 +21,6 @@ WEAR_LEVELS = {
 
 MIN_ACCEPTABLE_CONDITION = WEAR_LEVELS.get("MP")
 
-# ECOMMERCE_PROVIDERS = {
-#     "shopify": {
-#         "unique_image_identifier": "shopify",
-#         "add_cart_endpoint": "/cart/add.js?quantity=1&id="
-#     },
-#     "bigcommerce": {
-#         "unique_image_identifier": "bigcommerce",
-#         "add_cart_endpoint": None
-#     },
-#     "crystalcommerce": {
-#         "unique_image_identifier": "digitaloceanspaces",
-#         "add_cart_endpoint": None
-#     },
-#     "conduct": {
-#         "unique_image_identifier": "conduct",
-#         "add_cart_endpoint": None
-#     }
-# }
-
 def rmsdiff(im1, im2):
     "Calculate the root-mean-square difference between two images"
     diff = ImageChops.difference(im1, im2)
@@ -51,8 +34,6 @@ def same_set(set1: str, set2: str):
     loweredSet1 = str.lower(set1)
     loweredSet2 = str.lower(set2)
     return [c for c in loweredSet1 if c.isalpha()] == [c for c in loweredSet2 if c.isalpha()]
-
-
 
 def listing_to_cart(store_base_url: str, sku_variant_id):
     # Going to assume that snapcaster will only link to in-stock products
@@ -100,16 +81,16 @@ headers = {
 }
 
 # Scrape moxfield for deck list and image data
-print(f"{time.time() - script_start_time:.2f}s - [Moxfield] - Scraping Deck: '{deck_id}'")
+print(f"{time.time() - script_start_time:.2f}s - INFO - [Moxfield] - Scraping Deck: '{deck_id}'")
 moxfield_json = requests.get(f'https://api2.moxfield.com/v3/decks/all/{deck_id}', headers=headers)
 if moxfield_json.status_code != 200:
-    sys.exit(f"{time.time() - script_start_time:.2f}s - [Moxfield] - Response Status != 200: '{deck_id}'")
+    sys.exit(f"{time.time() - script_start_time:.2f}s - INFO - [Moxfield] - Response Status != 200: '{deck_id}'")
 moxfield_response = json.loads(moxfield_json.text)
 number_of_cards = len(moxfield_response["boards"]["mainboard"]["cards"].keys()) + len(moxfield_response["boards"]["commanders"]["cards"].keys())
-print(f"{time.time() - script_start_time:.2f}s - [Moxfield] - Deck Response Received: {number_of_cards} Cards To Find")
+print(f"{time.time() - script_start_time:.2f}s - INFO - [Moxfield] - Deck Response Received: {number_of_cards} Cards To Find")
 
 moxfield_cards = {}
-print(f"{time.time() - script_start_time:.2f}s - [Moxfield] - Parsing Response Data")
+print(f"{time.time() - script_start_time:.2f}s - INFO - [Moxfield] - Parsing Response Data")
 card_list = list(moxfield_response["boards"]["mainboard"]["cards"].values()) + list(moxfield_response["boards"]["commanders"]["cards"].values())
 for card in card_list:
     data = card["card"]
@@ -118,42 +99,43 @@ for card in card_list:
     moxfield_card["isFoil"] = card["isFoil"]
     moxfield_card["cardSet"] = data["set_name"]
     moxfield_card["cardName"] = data["name"]
-    moxfield_card["cardImageUrl"] = f"https://assets.moxfield.net/cards/card-{data['id']}-normal.webp?{data['image_seq']}"
+    card_face = data["card_faces"][0]["id"] if data["card_faces"] else data["id"]
+    moxfield_card["cardImageUrl"] = f"https://assets.moxfield.net/cards/card-{card_face}-normal.webp?{data['image_seq']}"
     moxfield_cards[data["name"]] = moxfield_card
 
-# Use the image data as a filter during snapcaster step
+retailer_names = set()
+cards_to_drop = set()
 
-
-card_names = moxfield_cards.keys()
-
-card_image_set_map = {card_name:{} for card_name in card_names}
-card_miss_stats = {card_name:{"nerdz": 0, "name": 0, "foil": 0, "art_series": 0, "shopify": 0, "condition": 0, "image": 0, "image_requests": 0, "valid_listings": 0} for card_name in card_names}
-request_time = script_start_time
+card_image_set_map = {card_name:{} for card_name in moxfield_cards.keys()}
+card_miss_stats = {card_name:{"nerdz": 0, "name": 0, "foil": 0, "art_series": 0, "shopify": 0, "condition": 0, "image": 0, "image_requests": 0, "valid_listings": 0} for card_name in moxfield_cards.keys()}
+request_time = time.time() - 3
+image_request_time = time.time() - 3
 card_num = 0
 for card_name, card_data in moxfield_cards.items():
     try:
-        valid_listings = []
-        card_data["listings"] = valid_listings
+        card_data["listings"] = {}
         image_map = card_image_set_map[card_name]
         stat_map = card_miss_stats[card_name]
         card_num += 1
         while time.time() - request_time < 3:
             time.sleep(0.1)
-        request_time = time.time()
-        print(f"{request_time - script_start_time:.2f}s - [Snapcaster] - ({card_num}/{number_of_cards}) - Scraping Listings for '{card_name}'")
+        print(f"{time.time() - script_start_time:.2f}s - INFO - [Snapcaster] - ({card_num}/{number_of_cards}) - Scraping Listings for '{card_name}'")
         x = requests.get(f'https://catalog.snapcaster.ca/api/v1/search/?tcg=mtg&name={card_name}')
-        mox_img_response = requests.get(card_data["cardImageUrl"])
-        if mox_img_response.status_code != 200:
-            stat_map["valid_listings"] -= 1
-            continue
-        mox_img = Image.open(BytesIO(mox_img_response.content)).convert("RGB").resize((323, 450), Image.ANTIALIAS)
         response_json = json.loads(x.text)
-        listing_num = 0
         listings = response_json['data']
         number_of_listings = min(len(listings), 100)
+        card_data["all_listings"] = listings[:number_of_listings]
+
+        mox_img_response = requests.get(card_data["cardImageUrl"])
+        request_time = time.time()
+        if mox_img_response.status_code != 200:
+            raise ListingException("Failed to get image from Moxfield", listings)
+        mox_img = Image.open(BytesIO(mox_img_response.content)).convert("RGB").resize((323, 450), Image.ANTIALIAS)
+
+        listing_num = 0
         for listing in listings[:number_of_listings]:
             listing_num += 1
-            print(f"{time.time() - script_start_time:.2f}s - [Snapcaster] - ({card_num}/{number_of_cards}) - '{card_name}' - Parsing listing ({listing_num}/{number_of_listings})")
+            # print(f"{time.time() - script_start_time:.2f}s - DEBUG - [Snapcaster] - ({card_num}/{number_of_cards}) - '{card_name}' - Parsing listing ({listing_num}/{number_of_listings})")
             store_base_url = store_url_from_listing(listing)
             if "nerdz" in store_base_url or "fantasyforged" in store_base_url or "everythinggames" in store_base_url:
                 stat_map["nerdz"] += 1
@@ -186,41 +168,86 @@ for card_name, card_data in moxfield_cards.items():
                     continue
             else:
                 image_map[map_key] = False
+                while time.time() - image_request_time < 2:
+                    time.sleep(0.1)
                 listing_img = Image.open(BytesIO(requests.get(listing["image"]).content)).convert("RGB").resize((323, 450), Image.ANTIALIAS)
+                image_request_time = time.time()
                 stat_map["image_requests"] += 1
-                if rmsdiff(mox_img, listing_img) >= 70:
+                if rmsdiff(mox_img, listing_img) > 69:
                     stat_map["image"] += 1
                     continue
                 image_map[map_key] = True
 
-            print(f"{time.time() - script_start_time:.2f}s - [Snapcaster] - ({card_num}/{number_of_cards}) - '{card_name}' - Listing ({listing_num}/{number_of_listings}) is Valid")
+            retailer = listing["website"]
             stat_map["valid_listings"] += 1
-            valid_listings.append(listing)
-        card_data["listings"] = valid_listings
-    except:
-        continue
-
-num_added_to_cart = 1
-for card_name, card_data in moxfield_cards.items():
-    listing_time = time.time()
-    print(f"{listing_time - script_start_time:.2f}s - [Adding to Cart] - ({num_added_to_cart}/{number_of_cards}) - '{card_name}'")
-    card_listings = card_data["listings"]
-    sorted_listings = sorted(card_listings, key=lambda listing: listing['price'])
-    for listing in sorted_listings:
-        addedToCart = listing_to_cart(store_url_from_listing(listing), listing["variant_id"])
-        time.sleep(2)
-        if addedToCart:
-            total_cost += listing["price"]
-            num_added_to_cart += 1
-            break
+            if retailer in card_data["listings"]:
+                stored_price = card_data["listings"][retailer]["price"]
+                if listing["price"] >= stored_price:
+                    continue
+            
+            retailer_names.add(retailer)
+            card_data["listings"][retailer] = listing
+        if not len(card_data['listings'].values()):
+            raise ListingException("Failed to find a valid listing in snapcaster response", listings)
         else:
-            continue
+            print(f"{time.time() - script_start_time:.2f}s - INFO - [Snapcaster] - ({card_num}/{number_of_cards}) - '{card_name}' - Found {len(card_data['listings'].values())} valid listings")
+
+    except ListingException as le:
+        print(f"{time.time() - script_start_time:.2f}s - ERROR - [Snapcaster] - ({card_num}/{number_of_cards}) - '{card_name}' - No valid listings, defaulting to first 10")
+        for listing in le.listings[:min(len(le.listings), 30)]:
+            if listing["name"] != card_name or "shopify" not in listing["image"]:
+                continue
+            retailer = listing["website"]
+            if retailer in card_data["listings"]:
+                stored_price = card_data["listings"][retailer]["price"]
+                if listing["price"] >= stored_price:
+                    continue
+            card_data["listings"][retailer] = listing
+        continue
+    except Exception as e:
+        cards_to_drop.add(card_name)
+        print(f"{time.time() - script_start_time:.2f}s - ERROR - [Snapcaster] - ({card_num}/{number_of_cards}) - '{card_name}' - Dropping card due to unexpected error: {e}")
+
+with open(f"data/{deck_id}", 'w') as card_data_file:
+    json.dump(moxfield_cards, card_data_file, indent=4)
+
+for drop in cards_to_drop:
+    del moxfield_cards[drop]
+
+print(f"{time.time() - script_start_time:.2f}s - INFO - [Optimization] - Optimizing retailers by cost and shipping fees")
+optimal_cost = retailer_selection.process(moxfield_cards, retailer_names)
+print(f"{time.time() - script_start_time:.2f}s - INFO - [Optimization] - Optimization complete. Total cost: ${optimal_cost:.2f}")
+
+with open(f"data/{deck_id}", 'r') as card_data_file:
+    file_dict = json.load(card_data_file)
+
+for name, data in moxfield_cards.items():
+    if name in file_dict:
+        if "optimal_listing" in data:
+            file_dict[name]["optimal_listing"] = data["optimal_listing"]
+        else:
+            file_dict[name]["optimal_listing"] = {}
+
+with open(f"data/{deck_id}", 'w') as card_data_file:
+    json.dump(file_dict, card_data_file, indent=4)
+    
+num_added_to_cart = 0
+for card_name, card_data in moxfield_cards.items():
+    num_added_to_cart += 1
+    print(f"{time.time() - script_start_time:.2f}s - INFO - [Adding to Cart] - ({num_added_to_cart}/{number_of_cards}) - '{card_name}'")
+    listing = card_data["optimal_listing"]
+    addedToCart = listing_to_cart(store_url_from_listing(listing), listing["variant_id"])
+    time.sleep(2)
+    if addedToCart:
+        total_cost += listing["price"]
+    else:
+        print(f"{time.time() - script_start_time:.2f}s - ERROR - [Adding to Cart] - ({num_added_to_cart}/{number_of_cards}) - Failed to add '{card_name}' to {listing['website']} cart")
+
 
 browser_options = Options()
 driver = webdriver.Chrome(chrome_options=browser_options)
 
-cookie_time = time.time()
-print(f"{cookie_time - script_start_time:.2f}s - [Cookies] - Importing cart cookies into Selenium")
+print(f"{time.time() - script_start_time:.2f}s - INFO - [Cookies] - Importing cart cookies into Selenium")
 driver.execute_cdp_cmd('Network.enable', {})
 for cookie in request_session.cookies:
     cookie_dict = {'domain': cookie.domain, 'name': cookie.name, 'value': cookie.value, 'secure': cookie.secure}
@@ -232,8 +259,7 @@ for cookie in request_session.cookies:
 driver.execute_cdp_cmd('Network.disable', {})
 
 
-chrome_time = time.time()
-print(f"{chrome_time - script_start_time:.2f}s - [Chrome Carts] - {len(active_carts)} Active Carts")
+print(f"{time.time() - script_start_time:.2f}s - INFO - [Chrome Carts] - {len(active_carts)} Active Carts")
 chrome_opened = False
 for store_url in active_carts:
     if chrome_opened:
@@ -243,6 +269,6 @@ for store_url in active_carts:
     driver.get(store_url)
 
 done_time = time.time()
-print(f"{done_time - script_start_time:.2f}s - [Done] - Total Cost ${total_cost:.2f}")
+print(f"{done_time - script_start_time:.2f}s - INFO - [Done] - Total Cost ${total_cost:.2f}")
 while(True):
     pass
