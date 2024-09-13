@@ -11,6 +11,15 @@ from PIL import Image, ImageChops
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 
+FILTERED_SITES = [
+    "ergames",
+    "nerdz",
+    "fantasyforged",
+    "everythinggames",
+    "hairyt",
+    "gamebridge"
+]
+
 WEAR_LEVELS = {
     "NM": 0,
     "LP": 1,
@@ -86,14 +95,15 @@ moxfield_json = requests.get(f'https://api2.moxfield.com/v3/decks/all/{deck_id}'
 if moxfield_json.status_code != 200:
     sys.exit(f"{time.time() - script_start_time:.2f}s - INFO - [Moxfield] - Response Status != 200: '{deck_id}'")
 moxfield_response = json.loads(moxfield_json.text)
-number_of_cards = len(moxfield_response["boards"]["mainboard"]["cards"].keys()) + len(moxfield_response["boards"]["commanders"]["cards"].keys())
-print(f"{time.time() - script_start_time:.2f}s - INFO - [Moxfield] - Deck Response Received: {number_of_cards} Cards To Find")
 
+number_of_cards = 0
 moxfield_cards = {}
 print(f"{time.time() - script_start_time:.2f}s - INFO - [Moxfield] - Parsing Response Data")
 card_list = list(moxfield_response["boards"]["mainboard"]["cards"].values()) + list(moxfield_response["boards"]["commanders"]["cards"].values())
 for card in card_list:
     data = card["card"]
+    if str(data["type_line"]).startswith("Basic Land"):
+        continue
 
     moxfield_card = {}
     moxfield_card["isFoil"] = card["isFoil"]
@@ -102,6 +112,9 @@ for card in card_list:
     card_face = data["card_faces"][0]["id"] if data["card_faces"] else data["id"]
     moxfield_card["cardImageUrl"] = f"https://assets.moxfield.net/cards/card-{card_face}-normal.webp?{data['image_seq']}"
     moxfield_cards[data["name"]] = moxfield_card
+    number_of_cards += 1
+
+print(f"{time.time() - script_start_time:.2f}s - INFO - [Moxfield] - Deck Response Received: {number_of_cards} Cards To Find")
 
 retailer_names = set()
 cards_to_drop = set()
@@ -137,10 +150,14 @@ for card_name, card_data in moxfield_cards.items():
             listing_num += 1
             # print(f"{time.time() - script_start_time:.2f}s - DEBUG - [Snapcaster] - ({card_num}/{number_of_cards}) - '{card_name}' - Parsing listing ({listing_num}/{number_of_listings})")
             store_base_url = store_url_from_listing(listing)
-            if "nerdz" in store_base_url or "fantasyforged" in store_base_url or "everythinggames" in store_base_url:
-                stat_map["nerdz"] += 1
+
+            bad_site = False
+            for site in FILTERED_SITES:
+                if site in store_base_url:
+                    bad_site = True
+            if bad_site:
                 continue
-            
+
             if listing["name"] != card_name:
                 stat_map["name"] += 1
                 continue
@@ -168,7 +185,7 @@ for card_name, card_data in moxfield_cards.items():
                     continue
             else:
                 image_map[map_key] = False
-                while time.time() - image_request_time < 2:
+                while time.time() - image_request_time < 3:
                     time.sleep(0.1)
                 listing_img = Image.open(BytesIO(requests.get(listing["image"]).content)).convert("RGB").resize((323, 450), Image.ANTIALIAS)
                 image_request_time = time.time()
@@ -194,15 +211,28 @@ for card_name, card_data in moxfield_cards.items():
 
     except ListingException as le:
         print(f"{time.time() - script_start_time:.2f}s - ERROR - [Snapcaster] - ({card_num}/{number_of_cards}) - '{card_name}' - No valid listings, defaulting to first 10")
+        found_backup = False
         for listing in le.listings[:min(len(le.listings), 30)]:
-            if listing["name"] != card_name or "shopify" not in listing["image"]:
+            store_base_url = store_url_from_listing(listing)
+            bad_site = False
+            for site in FILTERED_SITES:
+                if site in store_base_url:
+                    bad_site = True
+                    break
+
+            if bad_site or listing["name"] != card_name or "shopify" not in listing["image"]:
                 continue
             retailer = listing["website"]
             if retailer in card_data["listings"]:
                 stored_price = card_data["listings"][retailer]["price"]
                 if listing["price"] >= stored_price:
                     continue
+            retailer_names.add(retailer)
             card_data["listings"][retailer] = listing
+            found_backup = True
+        if not found_backup:
+            cards_to_drop.add(card_name)
+            print(f"{time.time() - script_start_time:.2f}s - ERROR - [Snapcaster] - ({card_num}/{number_of_cards}) - '{card_name}' - Default listings are all invalid")    
         continue
     except Exception as e:
         cards_to_drop.add(card_name)
@@ -236,6 +266,9 @@ for card_name, card_data in moxfield_cards.items():
     num_added_to_cart += 1
     print(f"{time.time() - script_start_time:.2f}s - INFO - [Adding to Cart] - ({num_added_to_cart}/{number_of_cards}) - '{card_name}'")
     listing = card_data["optimal_listing"]
+    if not listing:
+        print(f"{time.time() - script_start_time:.2f}s - ERROR - [Adding to Cart] - ({num_added_to_cart}/{number_of_cards}) - '{card_name}' Had no optimal listing")
+        continue
     addedToCart = listing_to_cart(store_url_from_listing(listing), listing["variant_id"])
     time.sleep(2)
     if addedToCart:
