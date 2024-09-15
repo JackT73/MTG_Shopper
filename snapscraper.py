@@ -246,11 +246,12 @@ def check_valid_image(card_name, card_data, card_image_map, listing, stat_map):
 
         scryfall_card = json.loads(get_override(f"https://api.scryfall.com/cards/{card_data['scryfall_id']}").text)
         scryfall_printings_response = json.loads(get_override(f"{scryfall_card['prints_search_uri']}").text)
-        scryfall_art_obj = scryfall_card if "card_faces" not in scryfall_card else scryfall_card["card_faces"][0]
+        scryfall_art_obj = scryfall_card if "image_uris" in scryfall_card else scryfall_card["card_faces"][0]
         good_art_id = scryfall_art_obj["illustration_id"]
         card_map["good_art_id"] = good_art_id
 
         num_printings = scryfall_printings_response["total_cards"]
+        num_illustrations = -1
         card_map["num_printings"] = num_printings
         
 
@@ -266,7 +267,7 @@ def check_valid_image(card_name, card_data, card_image_map, listing, stat_map):
         
             unique_art_ids = {good_art_id}
             for printing in scryfall_printings:
-                printing_art_obj = printing if "card_faces" not in printing else printing["card_faces"][0]
+                printing_art_obj = printing if "image_uris" in printing else printing["card_faces"][0]
                 unique_art_ids.add(printing_art_obj["illustration_id"])
 
             num_illustrations = len(unique_art_ids)
@@ -297,7 +298,7 @@ def check_valid_image(card_name, card_data, card_image_map, listing, stat_map):
             good_art_best_comparison = 1000
             bad_art_best_comparison = 1000
             for printing in scryfall_printings:
-                printing_art_obj = printing if "card_faces" not in printing else printing["card_faces"][0]
+                printing_art_obj = printing if "image_uris" in printing else printing["card_faces"][0]
                 art_id = printing_art_obj["illustration_id"] 
                 card_id = printing["id"]
                 if card_id not in printing_images:
@@ -328,7 +329,6 @@ def check_valid_image(card_name, card_data, card_image_map, listing, stat_map):
 
 request_session = requests.Session()
 active_carts = set()
-total_cost = 0
 
 if FULL_DECK_URL.startswith("https://www.moxfield.com/decks/"):
     moxfield_id = FULL_DECK_URL.split("decks/")[1]
@@ -433,8 +433,8 @@ for card_name, card_data in moxfield_cards.items():
         cards_to_drop.add(card_name)
         print(f"{time.time() - SCRIPT_START_TIME:.2f}s - ERROR - [Snapcaster] - ({card_num}/{number_of_cards}) - '{card_name}' - Dropping card due to unexpected error: {e}")
     
-    display_images(card_image_set_map[card_name]["good_listings"])
-    display_images(card_image_set_map[card_name]["bad_listings"])
+    # display_images(card_image_set_map[card_name]["good_listings"])
+    # display_images(card_image_set_map[card_name]["bad_listings"])
 
 with open(f"data/{moxfield_id}", 'w') as card_data_file:
     json.dump(moxfield_cards, card_data_file, indent=4)
@@ -468,9 +468,7 @@ for card_name, card_data in moxfield_cards.items():
         print(f"{time.time() - SCRIPT_START_TIME:.2f}s - ERROR - [Adding to Cart] - ({num_added_to_cart}/{number_of_cards}) - '{card_name}' Had no optimal listing")
         continue
     addedToCart = listing_to_cart(store_url_from_listing(listing), listing["variant_id"])
-    if addedToCart:
-        total_cost += listing["price"]
-    else:
+    if not addedToCart:
         print(f"{time.time() - SCRIPT_START_TIME:.2f}s - ERROR - [Adding to Cart] - ({num_added_to_cart}/{number_of_cards}) - Failed to add '{card_name}' to {listing['website']} cart")
 
 
@@ -499,6 +497,6 @@ for store_url in active_carts:
     driver.get(store_url)
 
 done_time = time.time()
-print(f"{done_time - SCRIPT_START_TIME:.2f}s - INFO - [Done] - Total Cost ${total_cost:.2f}")
+print(f"{done_time - SCRIPT_START_TIME:.2f}s - INFO - [Done] - Total Cost ${optimal_cost:.2f}")
 while(True):
     pass
