@@ -1,0 +1,477 @@
+{
+    "websites": {
+        "darkfoxtcg": {
+            "site_name": "darkfoxtcg",
+            "link": "https://www.darkfoxtcg.com/products/belbe-corrupted-observer-commander-legends?variant=40005385191577&utm_source=snapcaster.ca&utm_medium=referral&utm_campaign=snapcaster",
+            "fees": {
+                "0": 0,
+                "1": 300,
+                "6": 500
+            },
+            "fee_array": []
+        },
+        "fetchshock": {
+            "site_name": "fetchshock",
+            "link": "https://fetchshockgames.com/products/belbe-corrupted-observer-commander-legends?variant=45716288766262&utm_source=snapcaster.ca&utm_medium=referral&utm_campaign=snapcaster",
+            "fees": {
+                "0": 0,
+                "1": 300,
+                "38": 450
+            },
+            "fee_array": []
+        },
+        "gamebridge": {
+            "site_name": "gamebridge",
+            "link": "https://gamebridge.ca/products/shadowheart-dark-justiciar-showcase-commander-legends-battle-for-baldurs-gate?variant=44732196290806&utm_source=snapcaster.ca&utm_medium=referral&utm_campaign=snapcaster",
+            "fees": {
+                "0": 0,
+                "1": 3000
+            },
+            "fee_array": []
+        },
+        "pandorasboox": {
+            "site_name": "pandorasboox",
+            "link": "https://www.pandorasboox.ca/products/audience-with-trostani-showcase-murders-at-karlov-manor?variant=47766544515392&utm_source=snapcaster.ca&utm_medium=referral&utm_campaign=snapcaster",
+            "fees": {
+                "0": 0,
+                "1": 209,
+                "26": 1851
+            },
+            "fee_array": []
+        },
+        "multizone": {
+            "site_name": "multizone",
+            "link": "https://multizone.ca/products/belbe-corrupted-observer-commander-legends?variant=37382117949631&utm_source=snapcaster.ca&utm_medium=referral&utm_campaign=snapcaster",
+            "fees": {
+                "0": 0,
+                "1": 329
+            },
+            "fee_array": []
+        },
+        "gamebreakers": {
+            "site_name": "gamebreakers",
+            "link": "https://gamebreakers.ca/products/belbe-corrupted-observer-commander-legends?variant=41847456497853&utm_source=snapcaster.ca&utm_medium=referral&utm_campaign=snapcaster",
+            "fees": {
+                "0": 0,
+                "1": 500
+            },
+            "fee_array": []
+        },
+        "abyss": {
+            "site_name": "abyss",
+            "link": "https://www.abyssgamestore.com/products/belbe-corrupted-observer-commander-legends?variant=34280354742331&utm_source=snapcaster.ca&utm_medium=referral&utm_campaign=snapcaster",
+            "fees": {
+                "0": 0,
+                "1": 250
+            },
+            "fee_array": []
+        },
+        "omg": {
+            "site_name": "omg",
+            "link": "https://omggames.ca/products/belbe-corrupted-observer-commander-legends?variant=36921808945320&utm_source=snapcaster.ca&utm_medium=referral&utm_campaign=snapcaster",
+            "fees": {
+                "0": 0,
+                "1": 250
+            },
+            "fee_array": []
+        },
+        "cgrealm": {
+            "site_name": "cgrealm",
+            "link": "https://www.thecgrealm.com/products/belbe-corrupted-observer-commander-legends?variant=36797539188894&utm_source=snapcaster.ca&utm_medium=referral&utm_campaign=snapcaster",
+            "fees": {
+                "0": 0,
+                "1": 300
+            },
+            "fee_array": []
+        },
+        "kesselrun": {
+            "site_name": "kesselrun",
+            "link": "https://kesselrungames.ca/products/belbe-corrupted-observer-commander-legends?variant=36856035311778&utm_source=snapcaster.ca&utm_medium=referral&utm_campaign=snapcaster",
+            "fees": {
+                "0": 0,
+                "1": 200,
+                "12": 0,
+                "26": 1500
+            },
+            "fee_array": []
+        },
+        "reddragon": {
+            "site_name": "reddragon",
+            "link": "https://red-dragon.ca/products/belbe-corrupted-observer-foil-etched-commander-legends?variant=37991125418181&utm_source=snapcaster.ca&utm_medium=referral&utm_campaign=snapcaster",
+            "fees": {
+                "0": 0,
+                "1": 249
+            },
+            "fee_array": []
+        },
+        "outofthebox": {
+            "site_name": "outofthebox",
+            "link": "https://outoftheboxtcg.com/products/belbe-corrupted-observer-commander-legends?variant=36905260613782&utm_source=snapcaster.ca&utm_medium=referral&utm_campaign=snapcaster",
+            "fees": {
+                "0": 0,
+                "1": 350
+            },
+            "fee_array": []
+        },
+        "everythinggames": {
+            "site_name": "everythinggames",
+            "link": "https://everythinggames.ca/products/belbe-corrupted-observer-commander-legends?variant=41358690713784&utm_source=snapcaster.ca&utm_medium=referral&utm_campaign=snapcaster",
+            "fees": {
+                "0": 0,
+                "1": 899
+            },
+            "fee_array": []
+        },
+        "totalplay": {
+            "site_name": "totalplay",
+            "link": "https://www.totalplay.ca/products/belbe-corrupted-observer-commander-legends?variant=34695857864837&utm_source=snapcaster.ca&utm_medium=referral&utm_campaign=snapcaster",
+            "fees": {
+                "0": 0,
+                "1": 299,
+                "25": 598
+            },
+            "fee_array": []
+        },
+        "gamingkingdom": {
+            "site_name": "gamingkingdom",
+            "link": "https://gaming-kingdom.com/products/belbe-corrupted-observer-commander-legends?variant=32736686211153&utm_source=snapcaster.ca&utm_medium=referral&utm_campaign=snapcaster",
+            "fees": {
+                "0": 0,
+                "1": 499
+            },
+            "fee_array": []
+        },
+        "four01": {
+            "site_name": "four01",
+            "link": "https://store.401games.ca/products/belbe-corrupted-observer-foil-cmr?variant=39989054898363&utm_source=snapcaster.ca&utm_medium=referral&utm_campaign=snapcaster",
+            "fees": {
+                "0": 0,
+                "1": 150
+            },
+            "fee_array": []
+        },
+        "vortexgames": {
+            "site_name": "vortexgames",
+            "link": "https://vortexgames.ca/products/find-the-path-dungeons-dragons-adventures-in-the-forgotten-realms?variant=39451064893484&utm_source=snapcaster.ca&utm_medium=referral&utm_campaign=snapcaster",
+            "fees": {
+                "0": 0,
+                "1": 299
+            },
+            "fee_array": []
+        },
+        "exorgames": {
+            "site_name": "exorgames",
+            "link": "https://exorgames.com/products/find-the-path-dungeons-dragons-adventures-in-the-forgotten-realms?variant=40233620340909&utm_source=snapcaster.ca&utm_medium=referral&utm_campaign=snapcaster",
+            "fees": {
+                "0": 0,
+                "1": 295
+            },
+            "fee_array": []
+        },
+        "dragoncards": {
+            "site_name": "dragoncards",
+            "link": "https://tcg.dragoncardsandgames.com/products/audience-with-trostani-murders-at-karlov-manor?variant=43697419288775&utm_source=snapcaster.ca&utm_medium=referral&utm_campaign=snapcaster",
+            "fees": {
+                "0": 0,
+                "1": 500,
+                "30": 2000
+            },
+            "fee_array": []
+        },
+        "gameknight": {
+            "site_name": "gameknight",
+            "link": "https://gameknight.ca/products/find-the-path-dungeons-dragons-adventures-in-the-forgotten-realms?variant=39450989330476&utm_source=snapcaster.ca&utm_medium=referral&utm_campaign=snapcaster",
+            "fees": {
+                "0": 0,
+                "1": 200
+            },
+            "fee_array": []
+        },
+        "legendarycollectables": {
+            "site_name": "legendarycollectables",
+            "link": "https://legendarycollectables.com/products/belbe-corrupted-observer-etched-commander-legends?variant=40910350581865&utm_source=snapcaster.ca&utm_medium=referral&utm_campaign=snapcaster",
+            "fees": {
+                "0": 0,
+                "1": 399
+            },
+            "fee_array": []
+        },
+        "silvergoblin": {
+            "site_name": "silvergoblin",
+            "link": "https://silvergoblin.cards/products/belbe-corrupted-observer-commander-legends?variant=37845490401456&utm_source=snapcaster.ca&utm_medium=referral&utm_campaign=snapcaster",
+            "fees": {
+                "0": 0,
+                "1": 300,
+                "31": 1990
+            },
+            "fee_array": []
+        },
+        "houseofcards": {
+            "site_name": "houseofcards",
+            "link": "https://houseofcards.ca/products/belbe-corrupted-observer-commander-legends?variant=39660272779450&utm_source=snapcaster.ca&utm_medium=referral&utm_campaign=snapcaster",
+            "fees": {
+                "0": 0,
+                "1": 299
+            },
+            "fee_array": []
+        },
+        "game3": {
+            "site_name": "game3",
+            "link": "https://game3.ca/products/audience-with-trostani-murders-at-karlov-manor?variant=41900908216459&utm_source=snapcaster.ca&utm_medium=referral&utm_campaign=snapcaster",
+            "fees": {
+                "0": 0,
+                "1": 300,
+                "41": 800
+            },
+            "fee_array": []
+        },
+        "obsidian": {
+            "site_name": "obsidian",
+            "link": "https://obsidiangames.ca/products/audience-with-trostani-showcase-murders-at-karlov-manor?variant=42836212547779&utm_source=snapcaster.ca&utm_medium=referral&utm_campaign=snapcaster",
+            "fees": {
+                "0": 0,
+                "1": 299,
+                "51": 1299
+            },
+            "fee_array": []
+        },
+        "chimera": {
+            "site_name": "chimera",
+            "link": "https://chimeragamingonline.com/products/belbe-corrupted-observer-commander-legends?variant=37144426053781&utm_source=snapcaster.ca&utm_medium=referral&utm_campaign=snapcaster",
+            "fees": {
+                "0": 0,
+                "1": 400
+            },
+            "fee_array": []
+        },
+        "waypoint": {
+            "site_name": "waypoint",
+            "link": "https://waypointgames.ca/products/belbe-corrupted-observer-commander-legends?variant=36796980920478&utm_source=snapcaster.ca&utm_medium=referral&utm_campaign=snapcaster",
+            "fees": {
+                "0": 0,
+                "1": 349,
+                "41": 2102
+            },
+            "fee_array": []
+        },
+        "gametimecollectibles": {
+            "site_name": "gametimecollectibles",
+            "link": "https://itsgametime.ca/products/audience-with-trostani-murders-at-karlov-manor?variant=47569989042470&utm_source=snapcaster.ca&utm_medium=referral&utm_campaign=snapcaster",
+            "fees": {
+                "0": 0,
+                "1": 500
+            },
+            "fee_array": []
+        },
+        "dimitcg": {
+            "site_name": "dimitcg",
+            "link": "https://www.dimitcg.ca/products/assemble-the-legion-fallout?variant=46409229336808&utm_source=snapcaster.ca&utm_medium=referral&utm_campaign=snapcaster",
+            "fees": {
+                "0": 0,
+                "1": 250
+            },
+            "fee_array": []
+        },
+        "nerdvana": {
+            "site_name": "nerdvana",
+            "link": "https://www.nerdvanacardsandgames.com/products/investigators-journal-innistrad-crimson-vow?variant=41288889794621&utm_source=snapcaster.ca&utm_medium=referral&utm_campaign=snapcaster",
+            "fees": {
+                "0": 0,
+                "1": 1490
+            },
+            "fee_array": []
+        },
+        "3mana": {
+            "site_name": "3mana",
+            "link": "https://www.3mana.ca/products/basking-broodscale-modern-horizons-3?variant=45273980109020&utm_source=snapcaster.ca&utm_medium=referral&utm_campaign=snapcaster",
+            "fees": {
+                "0": 0,
+                "1": 299
+            },
+            "fee_array": []
+        },
+        "enterthebattlefield": {
+            "site_name": "enterthebattlefield",
+            "link": "https://enterthebattlefield.ca/products/belbe-corrupted-observer-commander-legends?variant=36874141073569&utm_source=snapcaster.ca&utm_medium=referral&utm_campaign=snapcaster",
+            "fees": {
+                "0": 0,
+                "1": 600
+            },
+            "fee_array": []
+        },
+        "upnorth": {
+            "site_name": "upnorth",
+            "link": "https://www.upnorthgames.ca/products/find-the-path-dungeons-dragons-adventures-in-the-forgotten-realms?variant=39447444684935&utm_source=snapcaster.ca&utm_medium=referral&utm_campaign=snapcaster",
+            "fees": {
+                "0": 0,
+                "1": 300,
+                "21": 2804
+            },
+            "fee_array": []
+        },
+        "taps": {
+            "site_name": "taps",
+            "link": "https://tapsgames.com/products/find-the-path-dungeons-dragons-adventures-in-the-forgotten-realms?variant=40062337908933&utm_source=snapcaster.ca&utm_medium=referral&utm_campaign=snapcaster",
+            "fees": {
+                "0": 0,
+                "1": 350
+            },
+            "fee_array": []
+        },
+        "boutiqueawesome": {
+            "site_name": "boutiqueawesome",
+            "link": "https://www.boutiqueawesome.com/products/belbe-corrupted-observer-legendary-cmr-b4427e73-8c60-490d-8ae3-53e872a5163e?variant=34076140273761&utm_source=snapcaster.ca&utm_medium=referral&utm_campaign=snapcaster",
+            "fees": {
+                "0": 0,
+                "1": 300
+            },
+            "fee_array": []
+        },
+        "skyfox": {
+            "site_name": "skyfox",
+            "link": "https://skyfoxgames.com/products/find-the-path-dungeons-dragons-adventures-in-the-forgotten-realms?variant=39416108220497&utm_source=snapcaster.ca&utm_medium=referral&utm_campaign=snapcaster",
+            "fees": {
+                "0": 0,
+                "1": 2276
+            },
+            "fee_array": []
+        },
+        "gamezilla": {
+            "site_name": "gamezilla",
+            "link": "https://gamezilla.ca/products/find-the-path-dungeons-dragons-adventures-in-the-forgotten-realms?variant=39849051586769&utm_source=snapcaster.ca&utm_medium=referral&utm_campaign=snapcaster",
+            "fees": {
+                "0": 0,
+                "1": 400
+            },
+            "fee_array": []
+        },
+        "crypt": {
+            "site_name": "crypt",
+            "link": "https://cryptmtg.com/products/belbe-corrupted-observer-commander-legends?variant=37409331675330&utm_source=snapcaster.ca&utm_medium=referral&utm_campaign=snapcaster",
+            "fees": {
+                "0": 0,
+                "1": 299
+            },
+            "fee_array": []
+        },
+        "mechagames": {
+            "site_name": "mechagames",
+            "link": "https://mechagames.ca/products/belbe-corrupted-observer-commander-legends?variant=45068547096883&utm_source=snapcaster.ca&utm_medium=referral&utm_campaign=snapcaster",
+            "fees": {
+                "0": 0,
+                "1": 299
+            },
+            "fee_array": []
+        },
+        "blackknight": {
+            "site_name": "blackknight",
+            "link": "https://blackknightgames.ca/products/audience-with-trostani-murders-at-karlov-manor?variant=40460153716869&utm_source=snapcaster.ca&utm_medium=referral&utm_campaign=snapcaster",
+            "fees": {
+                "0": 0,
+                "1": 1500
+            },
+            "fee_array": []
+        },
+        "lecoindujeu": {
+            "site_name": "lecoindujeu",
+            "link": "https://www.lecoindujeu.ca/products/belbe-corrupted-observer-foil-etched-commander-legends?variant=40324198596789&utm_source=snapcaster.ca&utm_medium=referral&utm_campaign=snapcaster",
+            "fees": {
+                "0": 0,
+                "1": 300
+            },
+            "fee_array": []
+        },
+        "mythicstore": {
+            "site_name": "mythicstore",
+            "link": "https://themythicstore.com/products/belbe-corrupted-observer-commander-legends?variant=36975675441312&utm_source=snapcaster.ca&utm_medium=referral&utm_campaign=snapcaster",
+            "fees": {
+                "0": 0,
+                "1": 249
+            },
+            "fee_array": []
+        },
+        "fanofthesport": {
+            "site_name": "fanofthesport",
+            "link": "https://fanofthesport.com/products/audience-with-trostani-showcase-murders-at-karlov-manor?variant=42505330720812&utm_source=snapcaster.ca&utm_medium=referral&utm_campaign=snapcaster",
+            "fees": {
+                "0": 0,
+                "1": 500
+            },
+            "fee_array": []
+        },
+        "trinityhobby": {
+            "site_name": "trinityhobby",
+            "link": "https://trinityhobby.com/products/massacre-girl-ravnica-remastered?variant=43996991160567&utm_source=snapcaster.ca&utm_medium=referral&utm_campaign=snapcaster",
+            "fees": {
+                "0": 0,
+                "1": 300
+            },
+            "fee_array": []
+        },
+        "bootown": {
+            "site_name": "bootown",
+            "link": "https://bootownsgamesandhobbies.com/products/massacre-girl-retro-ravnica-remastered?variant=44509029007519&utm_source=snapcaster.ca&utm_medium=referral&utm_campaign=snapcaster",
+            "fees": {
+                "0": 0,
+                "1": 375,
+                "11": 1395
+            },
+            "fee_array": []
+        },
+        "hfx": {
+            "site_name": "hfx",
+            "link": "https://hfxgames.com/products/belbe-corrupted-observer-commander-legends?variant=36849169891491&utm_source=snapcaster.ca&utm_medium=referral&utm_campaign=snapcaster",
+            "fees": {
+                "0": 0,
+                "1": 200
+            },
+            "fee_array": []
+        },
+        "darkcrystal": {
+            "site_name": "darkcrystal",
+            "link": "https://darkcrystalcardstcg.com/products/belbe-corrupted-observer-commander-legends?variant=49130756964628&utm_source=snapcaster.ca&utm_medium=referral&utm_campaign=snapcaster",
+            "fees": {
+                "0": 0,
+                "1": 250
+            },
+            "fee_array": []
+        },
+        "kingdomtitans": {
+            "site_name": "kingdomtitans",
+            "link": "https://kingdomtitans.cards/products/belbe-corrupted-observer-commander-legends?variant=39962318373050&utm_source=snapcaster.ca&utm_medium=referral&utm_campaign=snapcaster",
+            "fees": {
+                "0": 0,
+                "1": 299
+            },
+            "fee_array": []
+        },
+        "bordercity": {
+            "site_name": "bordercity",
+            "link": "https://bordercitygames.ca/products/audience-with-trostani-murders-at-karlov-manor?variant=44881270472863&utm_source=snapcaster.ca&utm_medium=referral&utm_campaign=snapcaster",
+            "fees": {
+                "0": 0,
+                "1": 200
+            },
+            "fee_array": []
+        },
+        "levelup": {
+            "site_name": "levelup",
+            "link": "https://levelupgames.ca/products/nullpriest-of-oblivion-extended-art-zendikar-rising?variant=38023348977838&utm_source=snapcaster.ca&utm_medium=referral&utm_campaign=snapcaster",
+            "fees": {
+                "0": 0,
+                "1": 199
+            },
+            "fee_array": []
+        },
+        "fantasyforged": {
+            "site_name": "fantasyforged",
+            "link": "https://fantasyforged.ca/products/audience-with-trostani-murders-at-karlov-manor?variant=44776510488799&utm_source=snapcaster.ca&utm_medium=referral&utm_campaign=snapcaster",
+            "fees": {
+                "0": 0,
+                "1": 1000000,
+                "11": 499
+            },
+            "fee_array": []
+        }
+    }
+}
