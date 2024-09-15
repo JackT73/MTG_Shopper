@@ -18,7 +18,8 @@ FILTERED_SITES = [
     "fantasyforged",
     "everythinggames",
     "hairyt",
-    "gamebridge"
+    "gamebridge",
+    "dimitcg"
 ]
 
 WEAR_LEVELS = {
