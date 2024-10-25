@@ -1,4 +1,4 @@
-import requests
+import requests_cache
 import json
 import time
 import sys
@@ -12,25 +12,19 @@ from PIL import Image
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 
-FILTERED_SITES = [
-    "ergames",
-    "nerdz",
-    "fantasyforged",
-    "everythinggames",
-    "hairyt",
-    "gamebridge",
-    "dimitcg"
-]
+FILTERED_SITES = []
 
 WEAR_LEVELS = {
     "NM": 0,
     "LP": 1,
+    "PL": 1,
     "MP": 2,
+    "SP": 2,
     "HP": 3,
     "DMG": 4
 }
 
-MIN_ACCEPTABLE_CONDITION = WEAR_LEVELS.get("MP")
+MIN_ACCEPTABLE_CONDITION = WEAR_LEVELS.get("HP")
 SCRIPT_START_TIME = time.time()
 
 DEFAULT_RATE_LIMIT_WAIT = 3
@@ -59,6 +53,21 @@ API_REQUEST_HISTORY = {
         "min_time_between_requests": 0.1,
         "number_of_requests": 0,
         "last_request_time": SCRIPT_START_TIME
+    },
+    "cc-client-assets.nyc3.cdn.digitaloceanspaces.com": {
+        "min_time_between_requests": 0.1,
+        "number_of_requests": 0,
+        "last_request_time": SCRIPT_START_TIME
+    },
+    "conduct-catalog-images.s3-us-west-2.amazonaws.com": {
+        "min_time_between_requests": 0.1,
+        "number_of_requests": 0,
+        "last_request_time": SCRIPT_START_TIME
+    },
+    "crystalcommerce-assets.nyc3.cdn.digitaloceanspaces.com": {
+        "min_time_between_requests": 0.1,
+        "number_of_requests": 0,
+        "last_request_time": SCRIPT_START_TIME
     }
 }
 
@@ -72,16 +81,16 @@ def get_override(request_url: str, headers=None):
     rate_limit_config = check_rate_limit(request_url)
 
     if headers:
-        response = requests.get(request_url, headers=headers)
+        response = request_session.get(request_url, headers=headers)
     else:
-        response = requests.get(request_url)
+        response = request_session.get(request_url)
     if rate_limit_config:
         rate_limit_config["number_of_requests"] += 1
         rate_limit_config["last_request_time"] = time.time()
 
     return response
 
-def post_override(request_url: str, session: requests.Session):
+def post_override(request_url: str, session):
     rate_limit_config = check_rate_limit(request_url)
     response = session.post(request_url)
 
@@ -191,9 +200,15 @@ def get_cards_from_moxfield_deck(deck_id: str):
 
 def get_listings_from_snapcaster(card_name: str):
     print(f"{time.time() - SCRIPT_START_TIME:.2f}s - INFO - [Snapcaster] - ({card_num}/{number_of_cards}) - Scraping Listings for '{card_name}'")
-    x = get_override(f'https://catalog.snapcaster.ca/api/v1/search/?tcg=mtg&name={card_name}')
+    listings = []
+    x = get_override(f'https://catalog.snapcaster.ca/api/v1/search?index=ca_singles_mtg_prod*&keyword={card_name}&sortBy=price-asc&maxResultsPerPage=100&pageNumber=1')
     response_json = json.loads(x.text)
-    listings = response_json['data']
+    num_pages = response_json["pagination"]["numPages"]
+    listings.extend(response_json['results'])
+    for pageNum in range(2, min(6, num_pages+1)):
+        x = get_override(f'https://catalog.snapcaster.ca/api/v1/search?index=ca_singles_mtg_prod*&keyword={card_name}&sortBy=price-asc&maxResultsPerPage=100&pageNumber={pageNum}')
+        response_json = json.loads(x.text)
+        listings.extend(response_json['results'])
     return listings
 
 def rmsdiff(im1, im2):
@@ -232,7 +247,7 @@ def display_images(images, titles=None):
     plt.show()
     pass
 
-def check_valid_image(card_name, card_data, card_image_map, listing, stat_map):
+def check_valid_image(card_name, card_data, card_image_map, listing, stat_map, scan_all=False):
     if card_name not in card_image_map:
         card_image_map[card_name] = {}
         card_map = card_image_map[card_name]
@@ -256,23 +271,23 @@ def check_valid_image(card_name, card_data, card_image_map, listing, stat_map):
         card_map["num_printings"] = num_printings
         
 
-        if num_printings < 30:
-            good_art = Image.open(BytesIO(get_override(f"{scryfall_art_obj['image_uris']['small']}").content)).convert("RGB").resize(ART_SIZE, Image.Resampling.LANCZOS)
-            card_map["good_art"] = good_art
 
-            bad_arts = {}
-            card_map["bad_arts"] = bad_arts
+        good_art = Image.open(BytesIO(get_override(f"{scryfall_art_obj['image_uris']['small']}").content)).convert("RGB").resize(ART_SIZE, Image.Resampling.LANCZOS)
+        card_map["good_art"] = good_art
 
-            scryfall_printings = scryfall_printings_response["data"]
-            card_map["scryfall_printings"] = scryfall_printings
-        
-            unique_art_ids = {good_art_id}
-            for printing in scryfall_printings:
-                printing_art_obj = printing if "image_uris" in printing else printing["card_faces"][0]
-                unique_art_ids.add(printing_art_obj["illustration_id"])
+        bad_arts = {}
+        card_map["bad_arts"] = bad_arts
 
-            num_illustrations = len(unique_art_ids)
-            card_map["num_illustrations"] = num_illustrations
+        scryfall_printings = scryfall_printings_response["data"]
+        card_map["scryfall_printings"] = scryfall_printings
+    
+        unique_art_ids = {good_art_id}
+        for printing in scryfall_printings:
+            printing_art_obj = printing if "image_uris" in printing else printing["card_faces"][0]
+            unique_art_ids.add(printing_art_obj["illustration_id"])
+
+        num_illustrations = len(unique_art_ids)
+        card_map["num_illustrations"] = num_illustrations
     else:
         card_map = card_image_map[card_name]
         good_art_id = card_map["good_art_id"]
@@ -286,9 +301,9 @@ def check_valid_image(card_name, card_data, card_image_map, listing, stat_map):
         scryfall_printings = card_map.get("scryfall_printings", None)
         num_illustrations = card_map.get("num_illustrations", None)
         
-    if num_printings < 30 and num_illustrations > 1:
-        map_key = (listing["set"], listing["showcase"])
-        if map_key in set_showcase_map:
+    if num_illustrations > 1:
+        map_key = (listing["set"], listing["showcase"], listing["frame"])
+        if map_key in set_showcase_map and not scan_all:
             if not set_showcase_map[map_key]:
                 stat_map["image"] += 1
                 return False
@@ -322,16 +337,16 @@ def check_valid_image(card_name, card_data, card_image_map, listing, stat_map):
         if num_illustrations == 1 and "one_art" not in card_map:
             card_map["one_art"] = True
             print(f"{time.time() - SCRIPT_START_TIME:.2f}s - DEBUG - [IMAGE COMPARE] - ({card_num}/{number_of_cards}) - '{card_name}' - Only one illustration available skipping image comparison")
-        if num_printings >= 30 and "too_many_prints" not in card_map:
-            card_map["too_many_prints"] = True
-            print(f"{time.time() - SCRIPT_START_TIME:.2f}s - DEBUG - [IMAGE COMPARE] - ({card_num}/{number_of_cards}) - '{card_name}' - Too many printings skipping image comparison")
+        # if num_printings >= 30 and "too_many_prints" not in card_map:
+        #     card_map["too_many_prints"] = True
+        #     print(f"{time.time() - SCRIPT_START_TIME:.2f}s - DEBUG - [IMAGE COMPARE] - ({card_num}/{number_of_cards}) - '{card_name}' - Too many printings skipping image comparison")
     
     return True
 
-request_session = requests.Session()
+request_session = requests_cache.CachedSession('mtg_cache')
 active_carts = set()
 
-if FULL_DECK_URL.startswith("https://www.moxfield.com/decks/"):
+if "decks/" in FULL_DECK_URL:
     moxfield_id = FULL_DECK_URL.split("decks/")[1]
 else:
     moxfield_id = FULL_DECK_URL
@@ -352,11 +367,12 @@ for card_name, card_data in moxfield_cards.items():
         stat_map = card_miss_stats[card_name]
 
         listings = get_listings_from_snapcaster(card_name)
-        number_of_listings = min(len(listings), 100)
+        number_of_listings = min(len(listings), 500)
         card_data["all_listings"] = listings[:number_of_listings]
         
         listing_num = 0
         for listing in listings[:number_of_listings]:
+            print(f"{time.time() - SCRIPT_START_TIME:.2f}s - DEBUG - [Snapcaster] - ({listing_num}/{number_of_listings}) - '{card_name}' - Validating Listings...", end='\r', flush=True)
             listing_num += 1
             store_base_url = store_url_from_listing(listing)
 
@@ -371,27 +387,27 @@ for card_name, card_data in moxfield_cards.items():
                 stat_map["name"] += 1
                 continue
 
-            if (listing["foil"] != '') != (card_data["isFoil"] == True):
-                stat_map["foil"] += 1
-                continue
+            # if (listing["foil"] != '') != (card_data["isFoil"] == True):
+            #     stat_map["foil"] += 1
+            #     continue
 
             if listing["art_series"]:
                 stat_map["art_series"] += 1
                 continue
 
-            if "shopify" not in listing["image"]:
-                stat_map["shopify"] += 1
-                continue
+            # if "shopify" not in listing["image"]:
+            #     stat_map["shopify"] += 1
+            #     continue
 
             if WEAR_LEVELS[listing["condition"]] > MIN_ACCEPTABLE_CONDITION:
                 stat_map["condition"] += 1
                 continue
             
-            if not check_valid_image(card_name, card_data, card_image_set_map, listing, stat_map):
-                stat_map["image"] += 1
-                continue
+            # if not check_valid_image(card_name, card_data, card_image_set_map, listing, stat_map):
+            #     stat_map["image"] += 1
+            #     continue
 
-            retailer = listing["website"]
+            retailer = listing["vendor"]
             stat_map["valid_listings"] += 1
             if retailer in card_data["listings"]:
                 stored_price = card_data["listings"][retailer]["price"]
@@ -400,32 +416,52 @@ for card_name, card_data in moxfield_cards.items():
             
             retailer_names.add(retailer)
             card_data["listings"][retailer] = listing
-        if not len(card_data['listings'].values()):
+        if not len(card_data['listings'].keys()):
             raise ListingException("Failed to find a valid listing in snapcaster response", listings)
+        elif len(card_data['listings'].keys()) >= 5:
+            print(f"{time.time() - SCRIPT_START_TIME:.2f}s - INFO - [Snapcaster] - ({card_num}/{number_of_cards}) - '{card_name}' - Found in stock at {len(card_data['listings'].values())} retailers")
+        elif len(card_data['listings'].keys()) > 1:
+            print(f"{time.time() - SCRIPT_START_TIME:.2f}s - WARNING - [Snapcaster] - ({card_num}/{number_of_cards}) - '{card_name}' - Found in stock at {len(card_data['listings'].values())} retailers")
         else:
-            print(f"{time.time() - SCRIPT_START_TIME:.2f}s - INFO - [Snapcaster] - ({card_num}/{number_of_cards}) - '{card_name}' - Found {len(card_data['listings'].values())} valid listings")
+            print(f"{time.time() - SCRIPT_START_TIME:.2f}s - CRITICAL - [Snapcaster] - ({card_num}/{number_of_cards}) - '{card_name}' - Found in stock at {len(card_data['listings'].values())} retailers")
 
     except ListingException as le:
-        print(f"{time.time() - SCRIPT_START_TIME:.2f}s - ERROR - [Snapcaster] - ({card_num}/{number_of_cards}) - '{card_name}' - No valid listings, defaulting to first 10")
+        print(f"{time.time() - SCRIPT_START_TIME:.2f}s - ERROR - [Snapcaster] - ({card_num}/{number_of_cards}) - '{card_name}' - No valid listings, defaulting to first 30")
         found_backup = False
-        for listing in le.listings[:min(len(le.listings), 30)]:
-            store_base_url = store_url_from_listing(listing)
-            bad_site = False
-            for site in FILTERED_SITES:
-                if site in store_base_url:
-                    bad_site = True
-                    break
-
-            if bad_site or listing["name"] != card_name or "shopify" not in listing["image"]:
+        for listing in le.listings:
+            if listing["name"] != card_name:
                 continue
-            retailer = listing["website"]
+            retailer = listing["vendor"]
             if retailer in card_data["listings"]:
                 stored_price = card_data["listings"][retailer]["price"]
                 if listing["price"] >= stored_price:
                     continue
+
+            # if not check_valid_image(card_name, card_data, card_image_set_map, listing, stat_map, scan_all=True):
+            #     continue
+
             retailer_names.add(retailer)
             card_data["listings"][retailer] = listing
             found_backup = True
+        if not found_backup:
+            for listing in le.listings[:min(len(le.listings), 30)]:
+                # store_base_url = store_url_from_listing(listing)
+                # bad_site = False
+                # for site in FILTERED_SITES:
+                #     if site in store_base_url:
+                #         bad_site = True
+                #         break
+
+                if listing["name"] != card_name:
+                    continue
+                retailer = listing["vendor"]
+                if retailer in card_data["listings"]:
+                    stored_price = card_data["listings"][retailer]["price"]
+                    if listing["price"] >= stored_price:
+                        continue
+                retailer_names.add(retailer)
+                card_data["listings"][retailer] = listing
+                found_backup = True
         if not found_backup:
             cards_to_drop.add(card_name)
             print(f"{time.time() - SCRIPT_START_TIME:.2f}s - ERROR - [Snapcaster] - ({card_num}/{number_of_cards}) - '{card_name}' - Default listings are all invalid")    
@@ -443,9 +479,12 @@ with open(f"data/{moxfield_id}", 'w') as card_data_file:
 for drop in cards_to_drop:
     del moxfield_cards[drop]
 
-print(f"{time.time() - SCRIPT_START_TIME:.2f}s - INFO - [Optimization] - Optimizing retailers by cost and shipping fees")
+optimize_start_time = time.time()
+print(f"{optimize_start_time - SCRIPT_START_TIME:.2f}s - INFO - [Optimization] - Optimizing retailers by cost and shipping fees")
 optimal_cost = retailer_selection.process(moxfield_cards, retailer_names)
-print(f"{time.time() - SCRIPT_START_TIME:.2f}s - INFO - [Optimization] - Optimization complete. Total cost: ${optimal_cost:.2f}")
+optimize_end_time = time.time()
+print(f"{optimize_end_time - SCRIPT_START_TIME:.2f}s - INFO - [Optimization] - Optimization complete in {optimize_end_time - optimize_start_time:.2f}s. Total cost: ${optimal_cost:.2f}")
+pass
 
 with open(f"data/{moxfield_id}", 'r') as card_data_file:
     file_dict = json.load(card_data_file)

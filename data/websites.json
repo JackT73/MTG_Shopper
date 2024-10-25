@@ -309,6 +309,251 @@
             },
             "fee_array": []
         },
+        "hairyt": {
+            "site_name": "hairyt",
+            "link": "https://hairyt.com/products/fertile-ground-invasion?variant=37426176098509&utm_source=snapcaster.ca&utm_medium=referral&utm_campaign=snapcaster",
+            "fees": {
+                "0": 0,
+                "1": 225
+            },
+            "fee_array": []
+        },
+        "eastridge": {
+            "site_name": "eastridge",
+            "link": "https://ergames.ca/products/pilgrims-eye-commander-legends-battle-for-baldurs-gate?variant=40944847224879&utm_source=snapcaster.ca&utm_medium=referral&utm_campaign=snapcaster",
+            "fees": {
+                "0": 0,
+                "1": 30000
+            },
+            "fee_array": []
+        },
+        "fusion": {
+            "site_name": "fusion",
+            "link": "https://www.fusiongamingonline.com/catalog/magic_singles-battle_for_zendikar_block-battle_for_zendikar/retreat_to_emeria/1135883",
+            "fees": {
+                "0": 0,
+                "1": 299
+            },
+            "fee_array": []
+        },
+        "thecomichunter": {
+            "site_name": "thecomichunter",
+            "link": "https://www.comichunter.net/catalog/magic_singles-battle_for_zedikar_block-battle_for_zendikar/retreat_to_emeria/160233",
+            "fees": {
+                "0": 0,
+                "1": 180
+            },
+            "fee_array": []
+        },
+        "atlas": {
+            "site_name": "atlas",
+            "link": "https://www.atlascollectables.com/catalog/magic_the_gathering-magic_singles-battle_for_zendikar_block-battle_for_zendikar/retreat_to_emeria/1081663",
+            "fees": {
+                "0": 0,
+                "1": 141
+            },
+            "fee_array": []
+        },
+        "kanatacg": {
+            "site_name": "kanatacg",
+            "link": "https://www.kanatacg.com/catalog/magic_singles-battle_for_zendikar/retreat_to_emeria/245113",
+            "fees": {
+                "0": 0,
+                "1": 254
+            },
+            "fee_array": []
+        },
+        "gauntlet": {
+            "site_name": "gauntlet",
+            "link": "https://www.gauntletgamesvictoria.ca/catalog/magic_singles-dominaria_remastered/rith_the_awakener/1629767",
+            "fees": {
+                "0": 0,
+                "1": 300
+            },
+            "fee_array": []
+        },
+        "godsarena": {
+            "site_name": "godsarena",
+            "link": "https://www.godsarena.com/catalog/magic_singles-duel_decks-duel_decks_phyrexia_vs_the_coalition/rith_the_awakener/43064",
+            "fees": {
+                "0": 0,
+                "1": 160
+            },
+            "fee_array": []
+        },
+        "cartamagicamontreal": {
+            "site_name": "cartamagicamontreal",
+            "link": "https://cartamagica.crystalcommerce.com/catalog/cartes_a_lunit__tcg_singles-magic_singles-return_to_ravnica_block-return_to_ravnica/rootborn_defenses/88479",
+            "fees": {
+                "0": 0,
+                "1": 300,
+                "21": 1001
+            },
+            "fee_array": []
+        },
+        "nerdzcafe": {
+            "site_name": "nerdzcafe",
+            "link": "https://www.nerdzcafe.com/products/mtg-retreat-to-emeriabattle-for-zendikar?variant=31537579163783&utm_source=snapcaster.ca&utm_medium=referral&utm_campaign=snapcaster",
+            "fees": {
+                "0": 0,
+                "1": 325
+            },
+            "fee_array": []
+        },
+        "orchardcity": {
+            "site_name": "orchardcity",
+            "link": "https://www.orchardcitygames.com/catalog/magic_singles-return_to_ravnica_block-return_to_ravnica/rootborn_defenses/88479",
+            "fees": {
+                "0": 0,
+                "1": 192
+            },
+            "fee_array": []
+        },
+        "topdeckhero": {
+            "site_name": "topdeckhero",
+            "link": "https://www.topdeckhero.com/catalog/magic_singles-modern_legal_sets-battle_for_zendikar/cinder_glade/215333",
+            "fees": {
+                "0": 0,
+                "1": 10000,
+                "11": 250 
+            },
+            "fee_array": []
+        },
+        "dragonfyre": {
+            "site_name": "dragonfyre",
+            "link": "https://www.dragonfyregames.ca/catalog/magic_the_gathering_singles-commander_legends/intangible_virtue/2048774",
+            "fees": {
+                "0": 0,
+                "1": 10000,
+                "30": 599,
+                "41": 1299 
+            },
+            "fee_array": []
+        },
+        "facetoface": {
+            "site_name": "facetoface",
+            "link": "https://www.facetofacegames.com/sundering-growth-rtr/",
+            "fees": {
+                "0": 0,
+                "1": 199
+            },
+            "fee_array": []
+        },
+        "sequence": {
+            "site_name": "sequence",
+            "link": "https://www.sequencecomics.ca/catalog/card_singles-magic_singles-commander_sets-commander_2019/sundering_growth/1027539",
+            "fees": {
+                "0": 0,
+                "1": 250
+            },
+            "fee_array": []
+        },
+        "firstplayer": {
+            "site_name": "firstplayer",
+            "link": "https://www.firstplayer.ca/catalog/magic_the_gathering_singles-pioneer-gatecrash/gruul_keyrune/90031",
+            "fees": {
+                "0": 0,
+                "1": 10000,
+                "11": 250,
+                "21": 450
+            },
+            "fee_array": []
+        },
+        "jjcards": {
+            "site_name": "jjcards",
+            "link": "https://jjcards.crystalcommerce.com/catalog/magic_singles-return_to_ravnica_block-gatecrash/gruul_keyrune/90031",
+            "fees": {
+                "0": 0,
+                "1": 10000,
+                "14": 300
+            },
+            "fee_array": []
+        },
+        "magicstronghold": {
+            "site_name": "magicstronghold",
+            "link": "https://www.magicstronghold.com/store/item/35695",
+            "fees": {
+                "0": 0,
+                "1": 157
+            },
+            "fee_array": []
+        },
+        "aethervaultgames": {
+            "site_name": "aethervaultgames",
+            "link": "https://www.aethervaultgames.com/catalog/magic_singles-special_editions-ravnica_clue_edition/gruul_guildgate/1665306",
+            "fees": {
+                "0": 0,
+                "1": 10000,
+                "10": 299
+            },
+            "fee_array": []
+        },
+        "mtgnorth": {
+            "site_name": "mtgnorth",
+            "link": "https://www.mtgnorth.ca/catalog/magic_the_gathering_singles-commander_sets-commander_dominaria_united/rohgahh_kher_keep_overlord/2095481",
+            "fees": {
+                "0": 0,
+                "1": 10000,
+                "22": 300
+            },
+            "fee_array": []
+        },
+        "manaforce": {
+            "site_name": "manaforce",
+            "link": "https://www.manaforce.ca/catalog/magic_the_gathering_singles-commander_series-commander_innistrad_midnight_hunt/fortified_village/2068780",
+            "fees": {
+                "0": 0,
+                "1": 10000,
+                "10": 189
+            },
+            "fee_array": []
+        },
+        "freegame": {
+            "site_name": "freegame",
+            "link": "https://www.entreprisesfreegame.com/catalog/magic_singles-innistrad_midnight_hunt__crimson_vow_block-commander_innistrad_midnight_hunt/fortified_village/2388389",
+            "fees": {
+                "0": 0,
+                "1": 10000,
+                "10": 300
+            },
+            "fee_array": []
+        },
+        "connectiongames": {
+            "site_name": "connectiongames",
+            "link": "https://www.theconnectiongames.com/catalog/magic_singles-streets_of_new_capenna_commander/sylvan_offering/427664",
+            "fees": {
+                "0": 0,
+                "1": 199
+            },
+            "fee_array": []
+        },
+        "prismatcg": {
+            "site_name": "prismatcg",
+            "link": "https://www.prismatcg.com/store/item/65648",
+            "fees": {
+                "0": 0,
+                "1": 157
+            },
+            "fee_array": []
+        },
+        "headsortailsgaming": {
+            "site_name": "headsortailsgaming",
+            "link": "https://heads-or-tails-gaming-inc.myshopify.com/products/wrenn-and-six-emblem-modern-horizons-tokens?variant=42807207035135",
+            "fees": {
+                "0": 0,
+                "1": 1490
+            },
+            "fee_array": []
+        },
+        "boutiquemagicarte": {
+            "site_name": "boutiquemagicarte",
+            "link": "https://magicartestore.com/products/wight-of-precinct-six-gatecrash?variant=46517433467158",
+            "fees": {
+                "0": 0,
+                "1": 218
+            },
+            "fee_array": []
+        },
         "taps": {
             "site_name": "taps",
             "link": "https://tapsgames.com/products/find-the-path-dungeons-dragons-adventures-in-the-forgotten-realms?variant=40062337908933&utm_source=snapcaster.ca&utm_medium=referral&utm_campaign=snapcaster",
