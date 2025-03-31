@@ -47,6 +47,8 @@ def listing_to_cart(store_base_url: str, sku_variant_id):
     active_carts.add(f"{store_base_url}/cart")
     return True
 
+deck_id = "abcdefghijklmnopqrstuvwxyz"
+full_deck_url = "https://www.moxfield.com/decks/{full_deck_id}"
 card_names = set()
 with open("cardlist.txt", 'r') as card_file:
     for line in card_file:
